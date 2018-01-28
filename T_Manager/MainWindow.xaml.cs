@@ -50,37 +50,36 @@ namespace T_Manager
 
         private void btnOpen_Click(object sender, RoutedEventArgs e)
         {
-            //List<Teacher> teacher = new List<Teacher>();
-            //try
-            //{
-            //    var package = new ExcelPackage(new FileInfo("excel003"));
-            //    ExcelWorksheet workSheet = package.Workbook.Worksheets[1];//lấy sheet đầu
+            List<Teacher> teacher = new List<Teacher>();
+            try
+            {
+                var package = new ExcelPackage(new FileInfo("excel003"));
+                ExcelWorksheet workSheet = package.Workbook.Worksheets[1];//lấy sheet đầu
 
-            //    for (int i = workSheet.Dimension.Start.Row; i < workSheet.Dimension.End.Row; i++)
-            //    {
-            //        try
-            //        {
-            //            int column = 1;
-            //            string name = workSheet.Cells[i, column++].Value.ToString();
+                for (int i = workSheet.Dimension.Start.Row; i < workSheet.Dimension.End.Row; i++)
+                {
+                    try
+                    {
+                        int column = 1;
+                        string name = workSheet.Cells[i, column++].Value.ToString();
 
-            //            var f_manv = workSheet.Cells[i, column++].Value;
+                        var f_manv = workSheet.Cells[i, column++].Value;
 
-            //            Teacher tCher = new Teacher();
-            //            {
-            //                tCher.ID = f_manv.ToString();
-            //            }
-            //            teacher.Add(tCher);
-            //        }
-            //        catch {}
+                        Teacher tCher = new Teacher();
+                        {
+                            tCher.ID = f_manv.ToString();
+                        }
+                        teacher.Add(tCher);
+                    }
+                    catch { }
 
-            //    }
-            //}
-            //catch { }
-            //gridDanhsach.ItemsSource = teacher;
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            if (openFileDialog.ShowDialog() == true) ;
-               
-        
+                }
+            }
+            catch { }
+            gridDanhsach.ItemsSource = teacher;
+
+
+
         }
     }
 }
