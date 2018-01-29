@@ -17,6 +17,7 @@ using System.Windows.Shapes;
 using OfficeOpenXml.DataValidation;
 using Microsoft.Win32;
 using T_Manager.DAO;
+using T_Manager.DTO;
 
 namespace T_Manager
 {
@@ -51,12 +52,8 @@ namespace T_Manager
 
         private void btnOpen_Click(object sender, RoutedEventArgs e)
         {
-
-
-            gridDanhsach.ItemsSource =  LopHocDAO.Instance.layDsLopHoc("select * from LopHoc;");
-
-
-
+           
+            gridDanhsach.ItemsSource = TietHocDAO.Instance.LayDsTietHoc("select * from TietHoc where maLopHoc = '123'");
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -66,7 +67,17 @@ namespace T_Manager.DAO
         }
         public List<TietHoc> LayDsTietHoc(string query)
         {
-            List<TietHoc> 
+            DataTable dt = DataProvider.Instance.ExcuteQuery(query);
+            List<TietHoc> dsTietHoc = new List<TietHoc>();
+            foreach (DataRow item in dt.Rows)
+            {
+                LopHoc lh = LopHocDAO.Instance.TimLopHoc(item["maLopHoc"] + "");
+                TietHoc th = new TietHoc(lh,Convert.ToDateTime(item["ngayHoc"]),int.Parse(item["trangThai"].ToString()),item["ghiChu"].ToString() );
+                dsTietHoc.Add(th);
+                
+            }
+            return dsTietHoc;
+            
         }
         // lấy thứ của ngày nhập học
         int LayThuNgayNhapHoc(DateTime ngayNhapHoc)

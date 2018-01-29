@@ -27,13 +27,17 @@ namespace T_Manager.DAO
         }
         private GiangVienDAO() { }
 
-        public bool themDuLieu(GiangVien gv)
+        public bool ThemDuLieu(GiangVien gv)
         {
             string query = @"insert into GiangVien(hoLotGiangVien,tenGiangVien,maGiangVien) values ( @hoLotGiangVien , @tenGiangVien , @maGiangVien );";
             int result = 0;
             result = DataProvider.Instance.ExcuteNonQuery(query, new object[] { gv.HoGv ,gv.TenGv ,gv.MaGv });
             return result > 0;
         }
+        /// <summary>
+        /// Lấy danh sách tất cả giảng viên
+        /// </summary>
+        /// <returns>List<GiangVien></returns>
         public List<GiangVien> LayDanhSachGiangVien()
         {
             List<GiangVien> dsGiangVien = new List<GiangVien>();
@@ -49,6 +53,11 @@ namespace T_Manager.DAO
             }
             return dsGiangVien;
         }
+        /// <summary>
+        /// Tìm giảng viên qua mã giảng viên
+        /// </summary>
+        /// <param name="maGiangVien">mã giảng viên</param>
+        /// <returns>GiangVien</returns>
         public GiangVien TimGiangVien(string maGiangVien)
         {
             string query = "select * from GiangVien where maGiangVien = " + maGiangVien + ";";

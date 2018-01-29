@@ -27,7 +27,7 @@ namespace T_Manager.DAO
         }
         private MonHocDAO() { }
 
-        public bool themDuLieu(MonHoc mh)
+        public bool ThemDuLieu(MonHoc mh)
         {
             string query = @"insert into MonHoc(tenMonHoc,maMonHoc) values ( @tenMonHoc , @maMonHoc );";
             int result = 0;
