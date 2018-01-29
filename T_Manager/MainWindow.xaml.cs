@@ -51,9 +51,9 @@ namespace T_Manager
 
         private void btnOpen_Click(object sender, RoutedEventArgs e)
         {
-            
-           
-            gridDanhsach.ItemsSource = GiangVienDAO.Instance.LayDanhSachGiangVien();
+
+
+            gridDanhsach.ItemsSource =  LopHocDAO.Instance.layDsLopHoc("select * from LopHoc;");
 
 
 

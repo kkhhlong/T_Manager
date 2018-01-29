@@ -64,6 +64,10 @@ namespace T_Manager.DAO
                 this.themDuLieu(th);
             }
         }
+        public List<TietHoc> LayDsTietHoc(string query)
+        {
+            List<TietHoc> 
+        }
         // lấy thứ của ngày nhập học
         int LayThuNgayNhapHoc(DateTime ngayNhapHoc)
         {

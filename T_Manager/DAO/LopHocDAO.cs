@@ -44,15 +44,24 @@ namespace T_Manager.DAO
             if (dt.Rows.Count > 0)
             {
                 foreach (DataRow item in dt.Rows)
+                    
                 {
-                    GiangVien gv =  GiangVienDAO.Instance.TimGiangVien(item["maGiangVien"].ToString());
-                    MonHoc mh = MonHocDAO.Instance.TimMonHoc(item["maMonHoc"] + "");
+                    GiangVien gv = null;
+                    if (item["maGiangVien"].ToString().Length > 0)
+                    gv =  GiangVienDAO.Instance.TimGiangVien(item["maGiangVien"].ToString());
 
-                    dsLopHoc.Add(new LopHoc(int.Parse(item["maLopHoc"].ToString()), int.Parse(item["thu"].ToString()), int.Parse(item["soTiet"].ToString()),item["tenPhong"].ToString(),item["maLop"].ToString(),gv,mh));
+                    MonHoc mh = MonHocDAO.Instance.TimMonHoc(item["maMonHoc"] + "");
+                    // public LopHoc (int maLopHoc, int thu, int tietBatDau, int soTiet,string tenPhong, string lop, GiangVien gv, MonHoc mh)
+                    dsLopHoc.Add(new LopHoc(int.Parse(item["maLopHoc"].ToString()), int.Parse(item["thu"].ToString()),int.Parse(item["tietBatDau"].ToString()) ,int.Parse(item["soTiet"].ToString()),item["tenPhong"].ToString(),item["maLop"].ToString(),gv,mh));
 
                 }
             }
             return dsLopHoc;
+        }
+        public LopHoc timLopHoc(string maLopHoc)
+        {
+            string query = "select * from LopHoc where maLopHoc = '" + maLopHoc + "';";
+
         }
 
        
