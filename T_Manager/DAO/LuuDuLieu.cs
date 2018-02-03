@@ -23,6 +23,7 @@ namespace T_Manager.DAO
             var xlWorkSheet = (Excel.Worksheet)xlWorkBook.Sheets.get_Item(1);
             Excel.Range xlRange = xlWorkSheet.UsedRange;
             object[,] dt = (object[,])xlRange.get_Value(Excel.XlRangeValueDataType.xlRangeValueDefault);
+            xlApp.Quit();
             return dt;
         }  
         //Lưu  dữ liệu từ excel vào QLYGIANGVIEN.db
@@ -72,7 +73,7 @@ namespace T_Manager.DAO
 
         static public string DocExcel(string path)
         {
-            object [,] dt =LayDuLieu(path);
+            object [,] dt = LayDuLieu(path);
             LuuCSDL(dt);
             return "";
         }

@@ -52,8 +52,9 @@ namespace T_Manager
 
         private void btnOpen_Click(object sender, RoutedEventArgs e)
         {
-           
-            gridDanhsach.ItemsSource = TietHocDAO.Instance.LayDsTietHoc("select * from TietHoc where maLopHoc = '123'");
+            LuuDuLieu.DocExcel(@"C:\Users\user\Desktop\T_Manager\T_Manager\bin\Debug\gvv.xlsx");
+            //gridDanhsach.ItemsSource = TietHocDAO.Instance.LayDsTietHoc("select * from TietHoc where maLopHoc = '123'");
+            MessageBox.Show(Directory.GetCurrentDirectory()+""); 
         }
     }
 }
