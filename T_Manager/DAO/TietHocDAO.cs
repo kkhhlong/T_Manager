@@ -23,6 +23,8 @@ namespace T_Manager.DAO
     class TietHocDAO
     {
         private static TietHocDAO instance;
+       
+
 
         public static TietHocDAO Instance
         {
@@ -37,7 +39,9 @@ namespace T_Manager.DAO
                 TietHocDAO.instance = value;
             }
         }
+        
         private TietHocDAO() { }
+
 
         
         public bool themDuLieu(TietHoc th)
@@ -48,7 +52,7 @@ namespace T_Manager.DAO
             return result > 0;
         }
 
-        //ngày học bắt đầu 15/2/2018 , 15 tuần chính thức , 2 tuần dự trữ soTietHoc = 15
+        //ngày học bắt đầu 15/1/2018 , 15 tuần chính thức , 2 tuần dự trữ soTietHoc = 15
         public void TaoTietHoc(LopHoc lh, int soTietHoc, DateTime ngayNhapHoc)
         {
             int thuNgayNhapHoc = LayThuNgayNhapHoc(ngayNhapHoc);
@@ -60,9 +64,10 @@ namespace T_Manager.DAO
 
             for (int i = 0; i < soTietHoc; i++)
             {
-               ngayNhapHoc = ngayNhapHoc.AddDays(7);
                 TietHoc th = new TietHoc(lh, ngayNhapHoc, -1, "");
                 this.themDuLieu(th);
+
+                ngayNhapHoc = ngayNhapHoc.AddDays(7);
             }
         }
         public List<TietHoc> LayDsTietHoc(string query)
@@ -79,6 +84,21 @@ namespace T_Manager.DAO
             return dsTietHoc;
             
         }
+        public List<TietHoc> LayDsTietHocParam(string query,object[] param)
+        {
+            DataTable dt = DataProvider.Instance.ExcuteQuery(query,param);
+            List<TietHoc> dsTietHoc = new List<TietHoc>();
+            foreach (DataRow item in dt.Rows)
+            {
+                LopHoc lh = LopHocDAO.Instance.TimLopHoc(item["maLopHoc"] + "");
+                TietHoc th = new TietHoc(lh, Convert.ToDateTime(item["ngayHoc"]), int.Parse(item["trangThai"].ToString()), item["ghiChu"].ToString());
+                dsTietHoc.Add(th);
+
+            }
+            return dsTietHoc;
+
+        }
+
         // lấy thứ của ngày nhập học
         int LayThuNgayNhapHoc(DateTime ngayNhapHoc)
         {
@@ -96,6 +116,81 @@ namespace T_Manager.DAO
 
             }
         }
+        private DateTime NgayHocTheoTuan(int tuan)
+        {
+            DateTime ngayNhapHoc = Convert.ToDateTime((DataProvider.Instance.ExcuteQuery("EXEC dbo.NgayHocDauTien")).Rows[0][0]);
+            int thu = LayThuNgayNhapHoc(ngayNhapHoc);
+            //trở về thứ 2
+            ngayNhapHoc = ngayNhapHoc.AddDays(thu - 2);
+            //datetime của thứ 2 tuần hiện tại
+            ngayNhapHoc = ngayNhapHoc.AddDays(7 * (tuan - 1));
+            return ngayNhapHoc;
+        }
+        public List<TietHoc> DSTietHocTheoTuanHoc(int tuan)
+        {
+            DateTime ngayHoc = NgayHocTheoTuan(tuan); 
+
+            return LayDsTietHocParam(@"EXEC LayTietHocTheoThoiGian @ngayBatDau , @ngayKetThuc ", new object[] { ngayHoc, ngayHoc.AddDays(7) });
+            
+
+            
+        }
+        
+        public List<TietHoc> DSTietHocTheoTuanHoc_GiangVien(int tuan, string maGiangVien)
+        {
+
+            DateTime ngayHoc = NgayHocTheoTuan(tuan);
+
+            return LayDsTietHocParam(@"EXEC dbo.LayTietHocTheoThoiGian_GiangVien @ngayBatDau , @ngayKetThuc , @maGiangVien ", new object[] { ngayHoc, ngayHoc.AddDays(7),maGiangVien });
+
+
+        }
+        public List<TietHoc> DSTietHocTheoTuanHoc_GiangVien_Lop(int tuan, string maGiangVien,string lop)
+        {
+            DateTime ngayHoc = NgayHocTheoTuan(tuan);
+
+            return LayDsTietHocParam(@"EXEC dbo.LayTietHocTheoThoiGian_GiangVien_Lop @ngayBatDau , @ngayKetThuc , @maGiangVien , @maLop ", new object[] { ngayHoc, ngayHoc.AddDays(7), maGiangVien,lop });
+
+
+        }
+        public List<TietHoc> DSTietHocTheoTuanHoc_GiangVien_MonHoc(int tuan, string maGiangVien, string mon)
+        {
+            DateTime ngayHoc = NgayHocTheoTuan(tuan);
+
+            return LayDsTietHocParam(@"EXEC dbo.LayTietHocTheoThoiGian_GiangVien_Mon @ngayBatDau , @ngayKetThuc , @maGiangVien , @maMonHoc ", new object[] { ngayHoc, ngayHoc.AddDays(7), maGiangVien, mon });
+
+
+        }
+        /// <summary>
+        /// Dses the tiet hoc theo tuan hoc giang vien mon hoc thu.
+        /// </summary>
+        /// <param name="tuan">The tuan.</param>
+        /// <param name="maGiangVien">The ma giang vien.</param>
+        /// <param name="mon">The mon.</param>
+        /// <param name="thu">Thu 2 = 2, Chu nhat = 8</param>
+        /// <returns></returns>
+        public List<TietHoc> DSTietHocTheoTuanHoc_GiangVien_MonHoc_Thu(int tuan, string maGiangVien, string mon,int thu)
+        {
+            DateTime ngayHoc = NgayHocTheoTuan(tuan);
+
+            return LayDsTietHocParam(@"EXEC dbo.LayTietHocTheoThoiGian_GiangVien_Mon @ngayBatDau , @ngayKetThuc , @maGiangVien , @maMonHoc , @thu ", new object[] { ngayHoc, ngayHoc.AddDays(7), maGiangVien, mon , thu });
+
+
+        }
+
+        public List<TietHoc> DSTietHocTheoTuanHoc_GiangVien_MonHoc_Thu_TietBatDau(int tuan, string maGiangVien, string mon, int thu, int tietBatDau)
+        {
+            DateTime ngayHoc = NgayHocTheoTuan(tuan);
+
+            return LayDsTietHocParam(@"EXEC dbo.LayTietHocTheoThoiGian_GiangVien_Mon_TietBatDau @ngayBatDau , @ngayKetThuc , @maGiangVien , @maMonHoc , @thu , @tietBatDau ", new object[] { ngayHoc, ngayHoc.AddDays(7), maGiangVien, mon, thu, tietBatDau });
+
+
+        }
+
+
+
+
+
     }
     
 }

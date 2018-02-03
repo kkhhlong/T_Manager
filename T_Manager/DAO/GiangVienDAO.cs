@@ -60,14 +60,17 @@ namespace T_Manager.DAO
         /// <returns>GiangVien</returns>
         public GiangVien TimGiangVien(string maGiangVien)
         {
+            if (maGiangVien != "") { 
             string query = "select * from GiangVien where maGiangVien = " + maGiangVien + ";";
-            DataTable dt =DataProvider.Instance.ExcuteQuery(query);
+            DataTable dt = DataProvider.Instance.ExcuteQuery(query);
             GiangVien gv = null;
             if (dt.Rows.Count > 0)
             {
-                gv = new GiangVien(dt.Rows[0]["hoLotGiangVien"]+"", dt.Rows[0]["tenGiangVien"]+"", dt.Rows[0]["maGiangVien"].ToString());
+                gv = new GiangVien(dt.Rows[0]["hoLotGiangVien"] + "", dt.Rows[0]["tenGiangVien"] + "", dt.Rows[0]["maGiangVien"].ToString());
             }
             return gv;
+        }
+        return null;
 
         }
 
