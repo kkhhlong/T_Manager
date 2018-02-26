@@ -38,11 +38,26 @@ namespace T_Manager.DAO
         /// Lấy danh sách tất cả giảng viên
         /// </summary>
         /// <returns>List<GiangVien></returns>
-        public List<GiangVien> LayDanhSachGiangVien()
+        public List<GiangVien> LayDanhSachTatCaGiangVien()
         {
             List<GiangVien> dsGiangVien = new List<GiangVien>();
             string query = "select*from GiangVien;";
             DataTable dt = DataProvider.Instance.ExcuteQuery(query);
+            if (dt.Rows.Count > 0)
+            {
+                foreach (DataRow item in dt.Rows)
+                {
+                    dsGiangVien.Add(new GiangVien(item["hoLotGiangVien"].ToString(), item["tenGiangVien"].ToString(), item["maGiangVien"].ToString()));
+
+                }
+            }
+            return dsGiangVien;
+        }
+        public List<GiangVien> LayDanhSachGiangVien(string query,object[] param)
+        {
+            List<GiangVien> dsGiangVien = new List<GiangVien>();
+            
+            DataTable dt = DataProvider.Instance.ExcuteQuery(query,param);
             if (dt.Rows.Count > 0)
             {
                 foreach (DataRow item in dt.Rows)
@@ -72,6 +87,10 @@ namespace T_Manager.DAO
         }
         return null;
 
+        }
+        public List<GiangVien> TimGiangVienTheoTen (string ten)
+        {
+            return LayDanhSachGiangVien(@"EXEC dbo.LayGiangVienTheoTen	 @ten", new object[] { ten });
         }
 
     }

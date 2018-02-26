@@ -34,7 +34,7 @@ namespace T_Manager.DAO
             result = DataProvider.Instance.ExcuteNonQuery(query,new object[] { mh.TenMh, mh.MaMh });
             return result > 0;
         }
-        public List<MonHoc> LayDanhSachMonHoc()
+        public List<MonHoc> LayDanhSachTatCaMonHoc()
         {
             List<MonHoc> dsMonHoc = new List<MonHoc>();
             string query = "select*from GiangVien;";
@@ -49,6 +49,21 @@ namespace T_Manager.DAO
             }
             return dsMonHoc;
         }
+        public List<MonHoc> LayDanhSachMonHoc(string query , object[] param)
+        {
+            List<MonHoc> dsMonHoc = new List<MonHoc>();
+            DataTable dt = DataProvider.Instance.ExcuteQuery(query,param);
+            if (dt.Rows.Count > 0)
+            {
+                foreach (DataRow item in dt.Rows)
+                {
+                    dsMonHoc.Add(new MonHoc(item["maMonHoc"].ToString(), item["tenMonHoc"].ToString()));
+
+                }
+            }
+            return dsMonHoc;
+        }
+
         public MonHoc TimMonHoc(string maMonHoc)
         {
             string query = "select * from MonHoc where maMonHoc = '" + maMonHoc + "';";
@@ -61,5 +76,10 @@ namespace T_Manager.DAO
             return mh;
 
         }
+        public List<MonHoc> TimMonHocTheoTen(string ten)
+        {
+            return LayDanhSachMonHoc(@"EXEC dbo.LayMonHocTheoTen	 @ten", new object[] { ten });
+        }
+
     }
 }

@@ -27,7 +27,7 @@ namespace T_Manager.DAO
             return dt;
         }  
         //Lưu  dữ liệu từ excel vào QLYGIANGVIEN.db
-        static void LuuCSDL(object[,] dt)
+        static void LuuCSDL(object[,] dt, DateTime ngayNhapHoc, DateTime ngayKetThuc, int soBuoiHoc)
         {
             for (int i = 2; i < dt.GetLength(0); i++)
             {
@@ -45,25 +45,37 @@ namespace T_Manager.DAO
                 10: mã lớp(của sinh viên)
                 13: mã lớp học
                 */
-
+                int thu = int.Parse(dt[i, 1].ToString());
+                int tietBatDau = int.Parse(dt[i, 2].ToString());
+                int soTiet = int.Parse(dt[i, 3].ToString());
+                string phong = dt[i, 4].ToString();
+                string maMonHoc = dt[i, 5].ToString();
+                string maGv = dt[i, 6].ToString();
+                string tenMh = dt[i, 7].ToString();
+                string hoLotGv;
+                string tenGv;
+                string maLop = dt[i, 10].ToString();
+                int maLopHoc = int.Parse(dt[i, 13].ToString());
                 //new GiangVien(họ lót, tên , mã)
                GiangVien gv = null;
-               if (dt[i, 6].ToString() != "")
+               if (maGv != "")
                 {
-                    gv = new GiangVien(dt[i, 8].ToString(), dt[i, 9].ToString(), dt[i, 6].ToString());
+                    hoLotGv = dt[i, 8].ToString();
+                    tenGv = dt[i, 9].ToString();
+                    gv = new GiangVien(hoLotGv, tenGv, maGv);
                     GiangVienDAO.Instance.ThemDuLieu(gv);
                 }
                // new MonHoc(Mã môn học, tên môn học)
-                MonHoc mh = new MonHoc(dt[i, 5].ToString(), dt[i, 7].ToString());
+                MonHoc mh = new MonHoc(maMonHoc, tenMh);
                 MonHocDAO.Instance.ThemDuLieu(mh);
                 
-                //new LopHoc(string mãlophoc,int thứ , int tietBatDau, int soTiet, string tenPhong, string lop, GiangVien gv, MonHoc mh)
-                LopHoc lh = new LopHoc(int.Parse(dt[i, 13].ToString()), int.Parse(dt[i, 1].ToString()), int.Parse(dt[i, 2].ToString()), int.Parse(dt[i, 3].ToString()), dt[i, 4].ToString(),dt[i,10].ToString(), gv, mh);
+                //public LopHoc (int maLopHoc, int thu, int tietBd, int soTiet, string lop, GiangVien gv, MonHoc mh)
+                LopHoc lh = new LopHoc(maLopHoc,thu,tietBatDau,soTiet,maLop,gv,mh);
                
             
                 LopHocDAO.Instance.ThemDuLieu(lh);
 
-                TietHocDAO.Instance.TaoTietHoc(lh, 15, new DateTime(2018, 1, 15));
+                TietHocDAO.Instance.TaoTietHoc(lh,soBuoiHoc,ngayNhapHoc,ngayKetThuc,phong,tietBatDau);
 
             }
             
@@ -71,10 +83,10 @@ namespace T_Manager.DAO
         }
         
 
-        static public string DocExcel(string path)
+        static public string DocExcel(string path,DateTime ngayNhapHoc , DateTime ngayKetThuc , int soTiet)
         {
             object [,] dt = LayDuLieu(path);
-            LuuCSDL(dt);
+            LuuCSDL(dt,ngayNhapHoc,ngayKetThuc,soTiet);
             return "";
         }
 

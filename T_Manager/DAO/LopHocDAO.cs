@@ -31,9 +31,9 @@ namespace T_Manager.DAO
         public bool ThemDuLieu(LopHoc lh)
         {
 
-            string query = @"INSERT INTO dbo.LopHoc( maLopHoc,thu,tietBatDau,soTiet,tenPhong,maLop,maGiangVien,maMonHoc) values ( @maLopHoc , @thu , @tietBatDau , @soTiet , @tenPhong , @maLop , @maGiangVien , @maMonHoc );";
+            string query = @"INSERT INTO dbo.LopHoc( maLopHoc,soTiet,maLop,maGiangVien,maMonHoc,thu,tietBatDau) values ( @maLopHoc , @soTiet , @maLop , @maGiangVien , @maMonHoc , @thu , @tietBd );";
             int result = 0;
-            result = DataProvider.Instance.ExcuteNonQuery(query, new object[] { lh.MaLopHoc,lh.Thu, lh.TietBatDau,lh.SoTiet,lh.TenPhong,lh.Lop,(lh.GiangVien!=null?lh.GiangVien.MaGv:(object)DBNull.Value),lh.MonHoc.MaMh });
+            result = DataProvider.Instance.ExcuteNonQuery(query, new object[] { lh.MaLopHoc,lh.SoTiet,lh.Lop,(lh.GiangVien!=null?lh.GiangVien.MaGv:(object)DBNull.Value),lh.MonHoc.MaMh,lh.Thu,lh.TietBd });
             return result > 0;
         }
         /// <summary>
@@ -57,8 +57,8 @@ namespace T_Manager.DAO
                     gv =  GiangVienDAO.Instance.TimGiangVien(item["maGiangVien"].ToString());
 
                     MonHoc mh = MonHocDAO.Instance.TimMonHoc(item["maMonHoc"] + "");
-                    // public LopHoc (int maLopHoc, int thu, int tietBatDau, int soTiet,string tenPhong, string lop, GiangVien gv, MonHoc mh)
-                    dsLopHoc.Add(new LopHoc(int.Parse(item["maLopHoc"].ToString()), int.Parse(item["thu"].ToString()),int.Parse(item["tietBatDau"].ToString()) ,int.Parse(item["soTiet"].ToString()),item["tenPhong"].ToString(),item["maLop"].ToString(),gv,mh));
+                    // public LopHoc (int maLopHoc ,int thu, int tietBd, int soTiet, string lop, GiangVien gv, MonHoc mh)
+                    dsLopHoc.Add(new LopHoc(int.Parse(item["maLopHoc"].ToString()),int.Parse(item["thu"].ToString()),int.Parse(item["tietBatDau"].ToString()),int.Parse(item["soTiet"].ToString()),item["maLop"].ToString(),gv,mh));
 
                 }
             }
@@ -77,7 +77,7 @@ namespace T_Manager.DAO
             GiangVien gv = GiangVienDAO.Instance.TimGiangVien(dt.Rows[0]["maGiangVien"].ToString());
             MonHoc mh = MonHocDAO.Instance.TimMonHoc(dt.Rows[0]["maMonHoc"].ToString());
             var item = dt.Rows[0];
-            LopHoc lh = new LopHoc(int.Parse(item["maLopHoc"].ToString()), int.Parse(item["thu"].ToString()), int.Parse(item["tietBatDau"].ToString()), int.Parse(item["soTiet"].ToString()), item["tenPhong"].ToString(), item["maLop"].ToString(), gv, mh);
+            LopHoc lh = new LopHoc(int.Parse(item["maLopHoc"].ToString()), int.Parse(item["thu"].ToString()), int.Parse(item["tietBatDau"].ToString()), int.Parse(item["soTiet"].ToString()), item["maLop"].ToString(), gv, mh);
             return lh;
 
 

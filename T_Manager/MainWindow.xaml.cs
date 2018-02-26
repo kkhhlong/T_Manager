@@ -52,10 +52,8 @@ namespace T_Manager
 
         private void btnOpen_Click(object sender, RoutedEventArgs e)
         {
-            List<TietHoc> th = new List<TietHoc>();
-            th = TietHocDAO.Instance.DSTietHocTheoTuanHoc_GiangVien_Lop(1, "00909","TH1602");
-            gridDanhsach.ItemsSource = th;
-            
+
+            TietHocDAO.Instance.ThemTietHocBuTheoGiaiDoan(new DateTime(2018, 2, 5), new DateTime(2018, 2, 20));
             
         }
     }
