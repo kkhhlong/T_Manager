@@ -16,6 +16,7 @@ namespace T_Manager.DTO
         public string HoGv { get => hoGv; set => hoGv = value; }
         public string TenGv { get => tenGv; set => tenGv = value; }
         public string MaGv { get => maGv; set => maGv = value; }
+        public string HoTenGV { get => HoGv + " " + TenGv; }
         //constructor
         public GiangVien(string hoGv,string tenGv,string maGv)
         {

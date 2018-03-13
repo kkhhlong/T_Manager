@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using T_Manager.DTO;
 using Excel = Microsoft.Office.Interop.Excel;
 
@@ -28,7 +29,8 @@ namespace T_Manager.DAO
         }  
         //Lưu  dữ liệu từ excel vào QLYGIANGVIEN.db
         static void LuuCSDL(object[,] dt, DateTime ngayNhapHoc, DateTime ngayKetThuc, int soBuoiHoc)
-        {
+        { 
+            DataProvider.Instance.ExcuteNonQuery(@" insert into ThongTinHoc values ( '"+String.Format("{0:yyyy-MM-dd}",ngayNhapHoc)+"','"+ String.Format("{0:yyyy-MM-dd}", ngayKetThuc)+"',"+ soBuoiHoc +")");
             for (int i = 2; i < dt.GetLength(0); i++)
             {
                 //các thự tự column trong excel

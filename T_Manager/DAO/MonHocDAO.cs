@@ -37,7 +37,7 @@ namespace T_Manager.DAO
         public List<MonHoc> LayDanhSachTatCaMonHoc()
         {
             List<MonHoc> dsMonHoc = new List<MonHoc>();
-            string query = "select*from GiangVien;";
+            string query = "select*from MonHoc;";
             DataTable dt = DataProvider.Instance.ExcuteQuery(query);
             if (dt.Rows.Count > 0)
             {

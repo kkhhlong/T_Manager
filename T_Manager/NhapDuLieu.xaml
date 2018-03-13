@@ -1,0 +1,82 @@
+﻿<Window x:Class="T_Manager.NhapDuLieu"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:T_Manager"
+      mc:Ignorable="d" 
+      d:DesignHeight="600" d:DesignWidth="800" ResizeMode="NoResize"
+      Title="Thêm Excel">
+
+    <DockPanel Background="#9ec3ff">
+        <Border  BorderBrush="#1956b7" BorderThickness="2 0 2 0"   Width="524" VerticalAlignment="Stretch" Padding="50">
+            <Grid Margin="0 10 0 0 ">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="50"/>
+            </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="60"/>
+                    <RowDefinition Height="60"/>
+                    <RowDefinition Height="60"/>
+                    <RowDefinition Height="60"/>
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="6" FontSize="27" Foreground="#1956b7">Nhập dữ liệu buổi học</Label>
+                <Viewbox Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="1" HorizontalAlignment="Left" Width="186" Height="50">
+                <Viewbox.Resources>
+                    <Style TargetType="DatePickerTextBox">
+
+                        <Setter Property="Text" Value="Ngày Nhập Học" />
+                        <Setter Property="IsEnabled" Value="False"/>
+                        <Setter Property="BorderBrush" Value="#1956b7"/>
+                        <Setter Property="BorderThickness" Value="3"/>
+                        <Setter Property="Padding" Value="2"/>
+                        <Setter Property="Foreground" Value="#1956b7"/>
+                        <Setter Property="FontSize" Value="10"/>
+                        <Setter Property="Width" Value="100"/>
+                        
+
+                    </Style>
+                </Viewbox.Resources>
+                <DatePicker SelectedDateChanged="ngayBatDauTxt_SelectedDateChanged" Name="ngayBatDauTxt" BorderThickness="0"/>
+
+            </Viewbox>
+            <Viewbox Grid.Column="4" Grid.ColumnSpan="4" Grid.Row="1" HorizontalAlignment="Left" Width="186" Height="50">
+                <Viewbox.Resources>
+                    <Style TargetType="DatePickerTextBox">
+
+                        <Setter Property="Text" Value="Ngày Kết thúc" />
+                        <Setter Property="IsEnabled" Value="False"/>
+                        <Setter Property="BorderBrush" Value="#1956b7"/>
+                        <Setter Property="BorderThickness" Value="3"/>
+                        <Setter Property="Padding" Value="2"/>
+                        <Setter Property="Foreground" Value="#1956b7"/>
+                        <Setter Property="FontSize" Value="10"/>
+                        <Setter Property="Width" Value="100"/>
+
+                    </Style>
+                </Viewbox.Resources>
+                <DatePicker SelectedDateChanged="ngayKetThucTxt_SelectedDateChanged" Name="ngayKetThucTxt"  BorderThickness="0"/>
+
+            </Viewbox>
+            <Label  Foreground="#1956b7" FontWeight="Medium" FontSize="18" Padding="5"  Height="40" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">Số tiết học:</Label>
+            <TextBox Margin="0 0 5 0" BorderBrush="#1956b7" BorderThickness="2" FontSize="18" Padding="5" TextAlignment="Center" Height="40" Grid.Row="2" Grid.Column="2" DataObject.Pasting="TextBoxPasting" PreviewTextInput="PreviewTextInputHandler" Name="soTietHocTxt" TextChanged="soTietHocTxt_TextChanged">
+
+            </TextBox>
+            <TextBox Name="link" Margin="0 0 5 0" BorderBrush="#1956b7" BorderThickness="2" FontSize="18" Padding="5" TextAlignment="Center" Height="40" Grid.Row="2" Grid.ColumnSpan="3" Grid.Column="4" IsReadOnly="True">
+                
+             Chưa có file
+            </TextBox>
+            <Button Grid.Row="2" Grid.Column="7" Margin="0 0 3 0" Height="40" Background="#1956b7" BorderBrush="White" BorderThickness="2" Foreground="White" FontSize="15" FontWeight="Bold" Click="Button_Click">...</Button>
+            <Button  IsEnabled="False" Name="luu" Grid.Row="3" Grid.Column="6" Grid.ColumnSpan="2" Height="40" Background="#1956b7" BorderBrush="White" BorderThickness="2" Foreground="White" FontSize="15" FontWeight="Bold" Click="Button_Click_1"> Lưu</Button>
+        </Grid>
+        </Border>
+
+    </DockPanel>
+</Window>
