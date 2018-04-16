@@ -8,13 +8,13 @@ using T_Manager.DTO;
 
 namespace T_Manager.DAO
 {
-  
-    
-       
+
+
+
     class TietHocDAO
     {
         private static TietHocDAO instance;
-       
+
 
 
         public static TietHocDAO Instance
@@ -30,16 +30,16 @@ namespace T_Manager.DAO
                 TietHocDAO.instance = value;
             }
         }
-        
+
         private TietHocDAO() { }
 
 
-        
+
         public bool themDuLieu(TietHoc th)
         {
-            string query = @"insert into TietHoc(maLopHoc,ngayHoc,trangThai,ghiChu,tenPhong,tietBatDau) values (  @maLopHoc , @ngayHoc , @trangThai , @ghiChu , @tenPhong , @tietBatDau );";
+            string query = @"insert into TietHoc(maLopHoc,ngayHoc,trangThai,ghiChu,tenPhong) values (  @maLopHoc , @ngayHoc , @trangThai , @ghiChu , @tenPhong );";
             int result = 0;
-            result = DataProvider.Instance.ExcuteNonQuery(query, new object[] { th.LopHoc.MaLopHoc, th.NgayHoc, th.TrangThai, th.GhiChu , th.TenPhong , th.TietBatDau });
+            result = DataProvider.Instance.ExcuteNonQuery(query, new object[] { th.LopHoc.MaLopHoc, th.NgayHoc, th.TrangThai, th.GhiChu, th.TenPhong, th.TietBatDau });
             return result > 0;
         }
 
@@ -47,8 +47,8 @@ namespace T_Manager.DAO
         public void TaoTietHoc(LopHoc lh, int soBuoiHoc, DateTime ngayNhapHoc, DateTime ngayKetThuc, string tenPhong, int tietBatDau)
         {
             int thuNgayNhapHoc = LayThuNgayNhapHoc(ngayNhapHoc);
-           
-            
+
+
             if (lh.Thu < thuNgayNhapHoc)
             {
                 ngayNhapHoc = ngayNhapHoc.AddDays(7 - lh.Thu);
@@ -57,7 +57,7 @@ namespace T_Manager.DAO
 
             for (int i = 0; i < soBuoiHoc; i++)
             {
-                TietHoc th = new TietHoc(lh,tenPhong,tietBatDau,ngayNhapHoc,-1,"");
+                TietHoc th = new TietHoc(lh, tenPhong, ngayNhapHoc, -1, "");
                 this.themDuLieu(th);
 
                 ngayNhapHoc = ngayNhapHoc.AddDays(7);
@@ -70,21 +70,21 @@ namespace T_Manager.DAO
             foreach (DataRow item in dt.Rows)
             {
                 LopHoc lh = LopHocDAO.Instance.TimLopHoc(item["maLopHoc"] + "");
-                TietHoc th = new TietHoc(lh,item["tenPhong"].ToString(),int.Parse(item["tietBatDau"].ToString()),Convert.ToDateTime(item["ngayHoc"]),int.Parse(item["trangThai"].ToString()),item["ghiChu"].ToString() );
+                TietHoc th = new TietHoc(lh, int.Parse(item["idTietHoc"].ToString()), item["tenPhong"].ToString(), Convert.ToDateTime(item["ngayHoc"]), int.Parse(item["trangThai"].ToString()), item["ghiChu"].ToString());
                 dsTietHoc.Add(th);
-                
+
             }
             return dsTietHoc;
-            
+
         }
-        public List<TietHoc> LayDsTietHocParam(string query,object[] param)
+        public List<TietHoc> LayDsTietHocParam(string query, object[] param)
         {
-            DataTable dt = DataProvider.Instance.ExcuteQuery(query,param);
+            DataTable dt = DataProvider.Instance.ExcuteQuery(query, param);
             List<TietHoc> dsTietHoc = new List<TietHoc>();
             foreach (DataRow item in dt.Rows)
             {
                 LopHoc lh = LopHocDAO.Instance.TimLopHoc(item["maLopHoc"] + "");
-                TietHoc th = new TietHoc(lh, item["tenPhong"].ToString(), int.Parse(item["tietBatDau"].ToString()), Convert.ToDateTime(item["ngayHoc"]), int.Parse(item["trangThai"].ToString()), item["ghiChu"].ToString());
+                TietHoc th = new TietHoc(lh, int.Parse(item["id"].ToString()), item["tenPhong"].ToString(), Convert.ToDateTime(item["ngayHoc"]), int.Parse(item["trangThai"].ToString()), item["ghiChu"].ToString());
                 dsTietHoc.Add(th);
 
             }
@@ -120,98 +120,76 @@ namespace T_Manager.DAO
             ngayNhapHoc = ngayNhapHoc.AddDays(7 * (tuan - 1));
             return ngayNhapHoc;
         }
-        public List<TietHoc> DSTietHocTheoTuanHoc(int tuan)
-        {
-            DateTime ngayHoc = NgayHocTheoTuan(tuan); 
-
-            return LayDsTietHocParam(@"EXEC LayTietHocTheoThoiGian @ngayBatDau , @ngayKetThuc ", new object[] { ngayHoc, ngayHoc.AddDays(7) });
-            
-
-            
-        }
-        
-        public List<TietHoc> DSTietHocTheoTuanHoc_GiangVien(int tuan, string maGiangVien)
+        public int TuanHoc(DateTime ngayHoc)
         {
 
-            DateTime ngayHoc = NgayHocTheoTuan(tuan);
 
-            return LayDsTietHocParam(@"EXEC dbo.LayTietHocTheoThoiGian_GiangVien @ngayBatDau , @ngayKetThuc , @maGiangVien ", new object[] { ngayHoc, ngayHoc.AddDays(7),maGiangVien });
+            DateTime ngayNhapHoc = Convert.ToDateTime((DataProvider.Instance.ExcuteQuery("select * from ThongTinHoc")).Rows[0][0]);
+            int thu = LayThuNgayNhapHoc(ngayNhapHoc);
+            //trở về thứ 2
+            ngayNhapHoc = ngayNhapHoc.AddDays(thu - 2);
+            int k = ngayHoc.DayOfYear - ngayNhapHoc.DayOfYear;
 
 
+            return k / 7 + 1;
         }
-        public List<TietHoc> DSTietHocTheoTuanHoc_GiangVien_Lop(int tuan, string maGiangVien,string lop)
+        public TietHoc layTietHocTheoId(int id)
         {
-            DateTime ngayHoc = NgayHocTheoTuan(tuan);
-
-            return LayDsTietHocParam(@"EXEC dbo.LayTietHocTheoThoiGian_GiangVien_Lop @ngayBatDau , @ngayKetThuc , @maGiangVien , @maLop ", new object[] { ngayHoc, ngayHoc.AddDays(7), maGiangVien,lop });
-
-
+            return LayDsTietHoc("select * from TietHoc where idTietHoc = " + id)[0];
         }
-        public List<TietHoc> DSTietHocTheoTuanHoc_GiangVien_MonHoc(int tuan, string maGiangVien, string mon)
+        public List<TietHoc> DSTietHocTheoLopHoc(string maLopHoc)
         {
-            DateTime ngayHoc = NgayHocTheoTuan(tuan);
-
-            return LayDsTietHocParam(@"EXEC dbo.LayTietHocTheoThoiGian_GiangVien_Mon @ngayBatDau , @ngayKetThuc , @maGiangVien , @maMonHoc ", new object[] { ngayHoc, ngayHoc.AddDays(7), maGiangVien, mon });
-
-
+            List<TietHoc> dsBuoiHoc = LayDsTietHoc("Select * from TietHoc where maLopHoc ='" + maLopHoc + "'");
+            List<TietHoc> dsHocBu = TietHocBuDAO.Instance.LayDsTietHoc("Select * from TietHocBu where maLopHoc ='" + maLopHoc + "'");
+            foreach (var item in dsHocBu)
+            {
+                dsBuoiHoc.Add(item);
+            }
+            return dsBuoiHoc;
         }
-        /// <summary>
-        /// Dses the tiet hoc theo tuan hoc giang vien mon hoc thu.
-        /// </summary>
-        /// <param name="tuan">The tuan.</param>
-        /// <param name="maGiangVien">The ma giang vien.</param>
-        /// <param name="mon">The mon.</param>
-        /// <param name="thu">Thu 2 = 2, Chu nhat = 8</param>
-        /// <returns></returns>
-        public List<TietHoc> DSTietHocTheoTuanHoc_GiangVien_MonHoc_Thu(int tuan, string maGiangVien, string mon,int thu)
-        {
-            DateTime ngayHoc = NgayHocTheoTuan(tuan);
+      
 
-            return LayDsTietHocParam(@"EXEC dbo.LayTietHocTheoThoiGian_GiangVien_Mon @maGiangVien , @maMonHoc ,  @ngayHoc   ", new object[] { maGiangVien, mon , ngayHoc.AddDays(thu-2)});
-
-
-        }
-
-        public List<TietHoc> DSTietHocTheoTuanHoc_GiangVien_MonHoc_Thu_TietBatDau(int tuan, string maGiangVien, string mon, int thu, int tietBatDau)
-        {
-            DateTime ngayHoc = NgayHocTheoTuan(tuan);
-
-            return LayDsTietHocParam(@"EXEC dbo.LayTietHocTheoThoiGian_GiangVien_Mon @maGiangVien , @maMonHoc ,  @ngayHoc , @tietBatDau   ", new object[] { maGiangVien, mon, ngayHoc.AddDays(thu - 2),tietBatDau });
-
-        }
+       
+       
+      
         #endregion
-        #region GiangVien
-        public List<TietHoc> DSTietHocTheoGiangVien( string maGiangVien)
-        {
-           
-
-            return LayDsTietHocParam(@"EXEC LayTietHocTheoGiangVien @maGiangVien ", new object[] { maGiangVien });
-
-
-
-        }
-
-        #endregion
+       
         #region ThemTietHocBu
-        public void ThemTietHocBuTheoTiet(int tietBatDau, int tietKetThuc, DateTime ngayNghi)
+        public void ThemTietHocBuTheoTiet(int tietBatDau, int tietKetThuc, DateTime ngayNghi, string ghiChu)
         {
-            DataProvider.Instance.ExcuteNonQuery("EXEC dbo.UpDateTietHocTheoTiet_NgayNghi @ngayNghi , @tietBatDau , @tietKetThuc ", new object[] { tietBatDau, tietKetThuc, ngayNghi });
+            DataProvider.Instance.ExcuteNonQuery("EXEC dbo.UpDateTietHocTheoTiet_NgayNghi @ngayNghi , @tietBatDau , @tietKetThuc , @ghiChu ", new object[] { tietBatDau, tietKetThuc, ngayNghi, ghiChu });
         }
-        public void ThemTietHocBuTheoNgay(DateTime ngayNghi)
+        public void ThemTietHocBuTheoNgay(DateTime ngayNghi, string ghiChu)
         {
             DataProvider.Instance.ExcuteNonQuery("EXEC dbo.UpDateTietHocTheoNgayNghi @ngayNghi ", new object[] { ngayNghi });
         }
-        public void ThemTietHocBuTheoGiaiDoan(DateTime ngayBatDau , DateTime ngayKetThuc)
+        public void ThemTietHocBuTheoGiaiDoan(DateTime ngayBatDau, DateTime ngayKetThuc, string ghiChu)
         {
-            while(ngayBatDau.Month != ngayKetThuc.Month && ngayBatDau.Day != ngayKetThuc.Day)
+            while (ngayBatDau.Month != ngayKetThuc.Month || ngayBatDau.Day != ngayKetThuc.Day || ngayBatDau.Year != ngayKetThuc.Year)
             {
-                DataProvider.Instance.ExcuteNonQuery("EXEC dbo.UpDateTietHocTheoNgayNghi @ngayNghi ", new object[] { ngayBatDau });
-                ngayBatDau.AddDays(1);
+                DataProvider.Instance.ExcuteNonQuery("EXEC dbo.UpDateTietHocTheoNgayNghi  " + string.Format("'{0:yyyy-MM-dd}', N'", ngayBatDau) + ghiChu + "'");
+                ngayBatDau = ngayBatDau.AddDays(1);
             }
+            DataProvider.Instance.ExcuteNonQuery("EXEC dbo.UpDateTietHocTheoNgayNghi  " + string.Format("'{0:yyyy-MM-dd}', N'", ngayBatDau) + ghiChu + "'");
+
         }
+
 
         #endregion
 
+        public void SuaTietHoc(TietHoc th)
+        {
+            if (th is TietHocBu)
+            {
+                DataProvider.Instance.ExcuteNonQuery(String.Format("dbo.SuaBuoiHocBu @idTietHoc = {0},@maLopHoc = {1},@tietBatDau = {2},  @tenPhong = '{3}',@ngayHoc='{4:yyyy-MM-dd}', @trangThai={5}, @ghiChu = N'{6}' ", th.Id,th.LopHoc.MaLopHoc,th.TietBatDau, th.TenPhong, th.NgayHoc, th.TrangThai, th.GhiChu));
+
+            }
+            else
+            {
+                DataProvider.Instance.ExcuteNonQuery(String.Format("dbo.SuaBuoiHoc @id = '{0}',@tenPhong = {1},@trangThai = N'{2}',  @ghiChu = N'{3}' ", th.Id, th.TenPhong, th.TrangThai, th.GhiChu));
+            }
+        }
+        
 
 
 
@@ -221,5 +199,5 @@ namespace T_Manager.DAO
 
 
     }
-    
+
 }

@@ -53,7 +53,7 @@ namespace T_Manager
         private void btnOpen_Click(object sender, RoutedEventArgs e)
         {
 
-            TietHocDAO.Instance.ThemTietHocBuTheoGiaiDoan(new DateTime(2018, 2, 5), new DateTime(2018, 2, 20));
+           // TietHocDAO.Instance.ThemTietHocBuTheoGiaiDoan(new DateTime(2018, 2, 5), new DateTime(2018, 2, 20));
             
         }
     }

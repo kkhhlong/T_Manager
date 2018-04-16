@@ -58,6 +58,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="BuoiHoc.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -66,16 +70,21 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="BuoiHoc.xaml.cs">
+      <DependentUpon>BuoiHoc.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DAO\DataProvider.cs" />
     <Compile Include="DAO\GiangVienDAO.cs" />
     <Compile Include="DAO\LopHocDAO.cs" />
     <Compile Include="DAO\LuuDuLieu.cs" />
     <Compile Include="DAO\MonHocDAO.cs" />
+    <Compile Include="DAO\TietHocBuDAO.cs" />
     <Compile Include="DAO\TietHocDAO.cs" />
     <Compile Include="DTO\GiangVien.cs" />
     <Compile Include="DTO\LopHoc.cs" />
     <Compile Include="DTO\MonHoc.cs" />
     <Compile Include="DTO\TietHoc.cs" />
+    <Compile Include="DTO\TietHocBu.cs" />
     <Compile Include="NgayNghi.xaml.cs">
       <DependentUpon>NgayNghi.xaml</DependentUpon>
     </Compile>
@@ -165,6 +174,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="picture\Excel-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="picture\add.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

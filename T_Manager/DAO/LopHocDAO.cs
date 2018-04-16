@@ -31,9 +31,9 @@ namespace T_Manager.DAO
         public bool ThemDuLieu(LopHoc lh)
         {
 
-            string query = @"INSERT INTO dbo.LopHoc( maLopHoc,soTiet,maLop,maGiangVien,maMonHoc,thu,tietBatDau) values ( @maLopHoc , @soTiet , @maLop , @maGiangVien , @maMonHoc , @thu , @tietBd );";
+            string query = @"INSERT INTO dbo.LopHoc( maLopHoc,soTiet,maLop,maGiangVien,maMonHoc,thu,tietBatDau,phong) values ( @maLopHoc , @soTiet , @maLop , @maGiangVien , @maMonHoc , @thu , @tietBd , @phong );";
             int result = 0;
-            result = DataProvider.Instance.ExcuteNonQuery(query, new object[] { lh.MaLopHoc,lh.SoTiet,lh.Lop,(lh.GiangVien!=null?lh.GiangVien.MaGv:(object)DBNull.Value),lh.MonHoc.MaMh,lh.Thu,lh.TietBd });
+            result = DataProvider.Instance.ExcuteNonQuery(query, new object[] { lh.MaLopHoc,lh.SoTiet,lh.Lop,(lh.GiangVien!=null?lh.GiangVien.MaGv:(object)DBNull.Value),lh.MonHoc.MaMh,lh.Thu,lh.TietBd,lh.Phong });
             return result > 0;
         }
         /// <summary>
@@ -58,7 +58,7 @@ namespace T_Manager.DAO
 
                     MonHoc mh = MonHocDAO.Instance.TimMonHoc(item["maMonHoc"] + "");
                     // public LopHoc (int maLopHoc ,int thu, int tietBd, int soTiet, string lop, GiangVien gv, MonHoc mh)
-                    dsLopHoc.Add(new LopHoc(int.Parse(item["maLopHoc"].ToString()),int.Parse(item["thu"].ToString()),int.Parse(item["tietBatDau"].ToString()),int.Parse(item["soTiet"].ToString()),item["maLop"].ToString(),gv,mh));
+                    dsLopHoc.Add(new LopHoc(int.Parse(item["maLopHoc"].ToString()),int.Parse(item["thu"].ToString()),int.Parse(item["tietBatDau"].ToString()),int.Parse(item["soTiet"].ToString()),item["maLop"].ToString(), item["phong"].ToString(),gv,mh));
 
                 }
             }
@@ -77,11 +77,15 @@ namespace T_Manager.DAO
             GiangVien gv = GiangVienDAO.Instance.TimGiangVien(dt.Rows[0]["maGiangVien"].ToString());
             MonHoc mh = MonHocDAO.Instance.TimMonHoc(dt.Rows[0]["maMonHoc"].ToString());
             var item = dt.Rows[0];
-            LopHoc lh = new LopHoc(int.Parse(item["maLopHoc"].ToString()), int.Parse(item["thu"].ToString()), int.Parse(item["tietBatDau"].ToString()), int.Parse(item["soTiet"].ToString()), item["maLop"].ToString(), gv, mh);
+            LopHoc lh = new LopHoc(int.Parse(item["maLopHoc"].ToString()), int.Parse(item["thu"].ToString()), int.Parse(item["tietBatDau"].ToString()), int.Parse(item["soTiet"].ToString()), item["maLop"].ToString(), item["phong"].ToString(), gv, mh);
             return lh;
 
 
 
+        }
+        public List<LopHoc> LayDsLopHocTheoGiangVien(GiangVien gv)
+        {
+            return LayDsLopHoc(@"SELECT * FROM dbo.LopHoc WHERE maGiangVien = '" + gv.MaGv + "'");
         }
 
        

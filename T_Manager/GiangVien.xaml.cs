@@ -30,7 +30,7 @@ namespace T_Manager
             List<GiangVien> listMh = GiangVienDAO.Instance.LayDanhSachTatCaGiangVien();
             foreach (var item in listMh)
             {
-                listview.Items.Add(CreateElement(item));
+                listview.Items.Add(CreateElementGv(item));
 
             }
         }
@@ -44,15 +44,16 @@ namespace T_Manager
             List<GiangVien> listMh = GiangVienDAO.Instance.TimGiangVienTheoTen(search.Text);
             foreach (var item in listMh)
             {
-                listview.Items.Add(CreateElement(item));
+                listview.Items.Add(CreateElementGv(item));
 
             }
         }
-        private ListViewItem CreateElement(GiangVien gv)
+        private ListViewItem CreateElementGv(GiangVien gv)
         {
             ListViewItem lv = new ListViewItem();
 
             lv.Content = gv;
+            
             
             lv.ContentTemplate = (DataTemplate)this.FindResource("myFirstItemTemplate");
 
@@ -63,6 +64,60 @@ namespace T_Manager
         {
             NhapDuLieu input = new NhapDuLieu();
             input.ShowDialog();
+            listview.Items.Clear();
+            List<GiangVien> listGv = GiangVienDAO.Instance.LayDanhSachTatCaGiangVien();
+            foreach (var item in listGv)
+            {
+                listview.Items.Add(CreateElementGv(item));
+
+            }
+        }
+
+        private void listview_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            int index = listview.SelectedIndex;
+            if(index != -1)
+            {
+                listviewMh.Items.Clear();
+                GiangVien gv = (GiangVien)((ListViewItem)listview.Items.GetItemAt(index)).Content;
+                List<LopHoc> listLh = LopHocDAO.Instance.LayDsLopHocTheoGiangVien(gv);
+                foreach (var item in listLh)
+                {
+                    listviewMh.Items.Add(CreateElementMh(item));
+                }
+            }
+            
+        }
+        private ListViewItem CreateElementMh(LopHoc mh)
+        {
+            ListViewItem lv = new ListViewItem();
+
+            lv.Content = mh;
+
+
+            lv.ContentTemplate = (DataTemplate)this.FindResource("LopHocItemTemplate");
+
+            return lv;
+        }
+
+        private void listviewMh_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            int index = listviewMh.SelectedIndex;
+            if (index != -1)
+            {
+               
+                LopHoc lh = (LopHoc)((ListViewItem)listviewMh.Items.GetItemAt(index)).Content;
+                BuoiHoc bh = new BuoiHoc(lh);
+                bh.Title =  lh.GiangVien.HoGv+" "+ lh.GiangVien.TenGv + "|" + lh.TenMH;
+                bh.ShowDialog();
+                
+            }
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            NgayNghi windows = new NgayNghi();
+            windows.ShowDialog();
         }
     }
 }

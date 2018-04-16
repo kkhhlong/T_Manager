@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:T_Manager"
       mc:Ignorable="d" 
-      d:DesignHeight="600" d:DesignWidth="800" ResizeMode="NoResize"
+      d:DesignHeight="450" d:DesignWidth="600" ResizeMode="NoResize"
       Title="Thêm Excel">
 
     <DockPanel Background="#9ec3ff">

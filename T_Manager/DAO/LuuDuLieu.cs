@@ -72,7 +72,7 @@ namespace T_Manager.DAO
                 MonHocDAO.Instance.ThemDuLieu(mh);
                 
                 //public LopHoc (int maLopHoc, int thu, int tietBd, int soTiet, string lop, GiangVien gv, MonHoc mh)
-                LopHoc lh = new LopHoc(maLopHoc,thu,tietBatDau,soTiet,maLop,gv,mh);
+                LopHoc lh = new LopHoc(maLopHoc,thu,tietBatDau,soTiet,maLop,phong,gv,mh);
                
             
                 LopHocDAO.Instance.ThemDuLieu(lh);
@@ -87,6 +87,7 @@ namespace T_Manager.DAO
 
         static public string DocExcel(string path,DateTime ngayNhapHoc , DateTime ngayKetThuc , int soTiet)
         {
+            DataProvider.Instance.ExcuteNonQuery("dbo.xoaDuLieu");
             object [,] dt = LayDuLieu(path);
             LuuCSDL(dt,ngayNhapHoc,ngayKetThuc,soTiet);
             return "";
