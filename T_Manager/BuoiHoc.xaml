@@ -293,7 +293,9 @@
         <TextBlock Name="noiDungMonHoc" FontSize="15"  Foreground="#FFFF66" ></TextBlock>
         </StackPanel>
         <DockPanel Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="4">
-            <Button Name="btnSua" Click="btnSua_Click" >Sửa</Button>
+            <Button Name="btnSua" Click="btnSua_Click" HorizontalAlignment="Left" >Sửa</Button>
+
+            <Button Name="btnExcel" Click="btnExcel_Click" HorizontalAlignment="Right" >Sửa</Button>
         </DockPanel>
         
         <DataGrid VirtualizingPanel.IsVirtualizing="False"  LoadingRow="DataGrid_LoadingRow"  SelectionChanged="gridTietHoc_SelectionChanged"  Grid.Row="7" Grid.ColumnSpan="6" Name="gridTietHoc" AutoGenerateColumns="False" FontSize="15" CanUserSortColumns="False" IsReadOnly="True" >

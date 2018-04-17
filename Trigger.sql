@@ -1,4 +1,22 @@
-﻿CREATE TRIGGER ThemBuoiHocBu ON  dbo.TietHoc
+﻿CREATE FUNCTION fNgayTrong (@maLopHoc INT )
+  RETURNS date
+  AS
+  BEGIN
+  DECLARE @ngayHoc DATE = (SELECT MAX(ngayHoc) FROM dbo.TietHoc WHERE maLopHoc = @maLopHoc)
+  WHILE @ngayHoc< (SELECT TOP 1 ngayKetThuc FROM dbo.ThongTinHoc)
+  BEGIN
+	SET @ngayHoc = DATEADD(DAY,7,@ngayHoc)
+	IF (SELECT COUNT(*) FROM dbo.TietHocBu WHERE maLopHoc = @maLopHoc AND ngayHoc = @ngayHoc) = 0
+		RETURN @ngayHoc;
+
+  END;
+  
+  RETURN NULL 
+ 
+  END
+  GO
+  
+CREATE TRIGGER ThemBuoiHocBu ON  dbo.TietHoc
 FOR UPDATE
 AS
 DECLARE TrigTempUpdate_Cursor CURSOR FOR
@@ -13,7 +31,7 @@ FETCH NEXT FROM TrigTempUpdate_Cursor INTO @maLopHoc, @trangThai, @id
 
 WHILE @@FETCH_STATUS = 0
 BEGIN
-	DECLARE @ngayHoc DATE = DATEADD(day,7*((SELECT COUNT(*) FROM dbo.TietHocBu WHERE maLopHoc = @maLopHoc AND (ngayHoc > (SELECT MAX(ngayHoc) FROM dbo.TietHoc WHERE maLopHoc =@maLopHoc)))+1)),(SELECT MAX(ngayHoc) FROM dbo.TietHoc WHERE maLopHoc =@maLopHoc))
+	DECLARE @ngayHoc DATE = dbo.fNgayTrong(@maLopHoc)
 	DECLARE @trangThaiTietHocMoi INT
 	DECLARE @tenPhong NVARCHAR(10) = (SELECT phong FROM dbo.LopHoc WHERE maLopHoc = @maLopHoc )
 	DECLARE @tietBatDau INT =  (SELECT tietBatDau FROM dbo.LopHoc WHERE maLopHoc = @maLopHoc)
@@ -113,9 +131,10 @@ FETCH NEXT FROM Trig INTO @idTietHoc,@ngayHoc
 
 		DEALLOCATE Trig;
         GO
-  UPDATE dbo.TietHoc SET trangThai = -1 WHERE ngayHoc ='2018-4-7' AND tenPhong = 'd41' AND ghiChu='C'
+ 
 
 
-
+  
+  
 
 
