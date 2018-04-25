@@ -5,7 +5,7 @@ USE QUANLYGIANGVIEN
 GO
 
 CREATE TABLE ThongTinHoc(
-ngayNhapHoc DATE,
+ngayNhapHoc DATE PRIMARY KEY,
 ngayKetThuc DATE,
 soTietHoc INT
 )
@@ -51,7 +51,7 @@ GO
 
 CREATE TABLE TietHocBu(
 maLopHoc INT REFERENCES LopHoc,
-idTietHoc INT REFERENCES TietHoc,
+idTietHoc INT REFERENCES TietHoc PRIMARY KEY,
 tenPhong NVARCHAR(10),
 ngayHoc DATE,
 tietBatDau INT,
@@ -60,14 +60,11 @@ ghiChu NVARCHAR(300)
 
 )
 GO
-CREATE VIEW ngayHocBthMax
-AS
-SELECT maLopHoc,MAX(ngayHoc) AS ngayHoc FROM dbo.TietHoc GROUP BY maLopHoc
-SELECT * FROM ngayHocBthMax
 
 
+SELECT * FROM dbo.ThongTinHoc
 
-
+SELECT * FROM dbo.GiangVien
 
 
 

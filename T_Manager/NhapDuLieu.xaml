@@ -44,7 +44,7 @@
 
                     </Style>
                 </Viewbox.Resources>
-                <DatePicker SelectedDateChanged="ngayBatDauTxt_SelectedDateChanged" Name="ngayBatDauTxt" BorderThickness="0"/>
+                <DatePicker  Name="ngayBatDauTxt" BorderThickness="0"/>
 
             </Viewbox>
             <Viewbox Grid.Column="4" Grid.ColumnSpan="4" Grid.Row="1" HorizontalAlignment="Left" Width="186" Height="50">

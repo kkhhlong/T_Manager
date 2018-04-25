@@ -51,6 +51,7 @@
         </DataTemplate>
 
     </Window.Resources>
+    
     <Grid Background="#9ec3ff">
         <Grid.RowDefinitions>
             <RowDefinition Height="1*" MinHeight="70"/>
@@ -112,7 +113,7 @@
 
 
 
-                <ListView  ScrollViewer.VerticalScrollBarVisibility="Auto" Background="Transparent" BorderThickness="0" Name="listview" SelectionChanged="listview_SelectionChanged">
+                    <ListView  ScrollViewer.VerticalScrollBarVisibility="Auto" Background="Transparent" BorderThickness="0" Name="listview" SelectionChanged="listview_SelectionChanged" >
                     <ListView.Resources>
                         
 

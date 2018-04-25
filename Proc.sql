@@ -87,8 +87,7 @@ as
 UPDATE dbo.TietHoc	SET  trangThai = 0 ,ghiChu = @ghiChu
 WHERE ngayHoc = @ngayNghi AND trangThai != 0 ;
 GO
-dbo.UpDateTietHocTheoNgayNghi @ngayNghi = '2018-04-19', -- date
-    @ghiChu = N'' -- nvarchar(300)
+
 
 
 
@@ -115,3 +114,121 @@ VALUES  ( @ngayBatDau, -- ngayNhapHoc - date
           @soTiet
 		  )
 GO
+CREATE PROCEDURE themGiangVien 
+@maGiangVien CHAR(5),
+@hoLotGiangVien NVARCHAR(60),
+@tenGiangVien NVARCHAR(30)
+AS
+BEGIN
+INSERT INTO dbo.GiangVien
+        ( hoLotGiangVien ,
+          tenGiangVien ,
+          maGiangVien
+        )
+VALUES  ( @hoLotGiangVien , -- hoLotGiangVien - nvarchar(60)
+          @tenGiangVien , -- tenGiangVien - nvarchar(30)
+          @maGiangVien  -- maGiangVien - char(5)
+        )
+END
+GO
+CREATE PROCEDURE themLopHoc
+@maLopHoc INT,
+@thu INT,
+@tietBatDau INT,
+@soTiet INT,
+@phong NVARCHAR(10),
+@maLop NVARCHAR(10),
+@maGiangVien CHAR(5),
+@maMonHoc CHAR(7)
+AS
+BEGIN
+INSERT INTO dbo.LopHoc
+        ( maLopHoc ,
+          thu ,
+          tietBatDau ,
+          soTiet ,
+          phong ,
+          maLop ,
+          maGiangVien ,
+          maMonHoc
+        )
+VALUES  ( @maLopHoc , -- maLopHoc - int
+          @thu , -- thu - int
+          @tietBatDau , -- tietBatDau - int
+          @soTiet , -- soTiet - int
+          @phong , -- phong - nvarchar(10)
+          @maLop , -- maLop - nvarchar(10)
+          @maGiangVien , -- maGiangVien - char(5)
+          @maMonHoc  -- maMonHoc - char(7)
+        )
+END
+GO
+
+CREATE PROCEDURE themMonHoc
+@tenMonHoc NVARCHAR(100),
+@maMonHoc CHAR(7)
+AS
+BEGIN
+	INSERT INTO dbo.MonHoc
+	        ( tenMonHoc, maMonHoc )
+	VALUES  ( @tenMonHoc, -- tenMonHoc - nvarchar(100)
+	          @maMonHoc  -- maMonHoc - char(7)
+	          )
+END	
+GO
+CREATE PROCEDURE themTietHoc
+@maLopHoc INT,
+@tenPhong NVARCHAR(10),
+@ngayHoc DATE,
+@trangThai INT,
+@ghiChu NVARCHAR(300)
+AS
+BEGIN
+INSERT INTO dbo.TietHoc
+        ( maLopHoc ,
+          tenPhong ,
+          ngayHoc ,
+          trangThai ,
+          ghiChu
+        )
+VALUES  ( @maLopHoc , -- maLopHoc - int
+          @tenPhong , -- tenPhong - nvarchar(10)
+          @ngayHoc , -- ngayHoc - date
+          @trangThai , -- trangThai - int
+          @ghiChu  -- ghiChu - nvarchar(300)
+        )
+END	
+GO
+CREATE PROCEDURE themTietHocBu
+@maLopHoc INT,
+@idTietHoc INT,
+@tenPhong NVARCHAR(10),
+@ngayHoc DATE,
+@tietBatDau INT,
+@trangThai INT,
+@ghiChu NVARCHAR(300)
+AS
+BEGIN
+ INSERT INTO dbo.TietHocBu
+         ( maLopHoc ,
+           idTietHoc ,
+           tenPhong ,
+           ngayHoc ,
+           tietBatDau ,
+           trangThai ,
+           ghiChu
+         )
+ VALUES  ( @maLopHoc , -- maLopHoc - int
+           @idTietHoc , -- idTietHoc - int
+           @tenPhong , -- tenPhong - nvarchar(10)
+           @ngayHoc , -- ngayHoc - date
+           @tietBatDau , -- tietBatDau - int
+           @trangThai , -- trangThai - int
+           @ghiChu  -- ghiChu - nvarchar(300)
+         )
+END
+GO
+SELECT * FROM dbo.GiangVien
+SELECT * FROM dbo.MonHoc
+
+

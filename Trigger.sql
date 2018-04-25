@@ -15,7 +15,27 @@
  
   END
   GO
+
+  CREATE FUNCTION fHocBuDefault (@maLopHoc INT , @buoiHoc DATE )
+  RETURNS bit
+  AS
+  BEGIN
+  DECLARE @ngayHoc DATE = (SELECT MAX(ngayHoc) FROM dbo.TietHoc WHERE maLopHoc = @maLopHoc)
+  WHILE @ngayHoc< (SELECT TOP 1 ngayKetThuc FROM dbo.ThongTinHoc)
+  BEGIN
+	SET @ngayHoc = DATEADD(DAY,7,@ngayHoc)
+	IF (@buoiHoc = @ngayHoc)
+		RETURN 1;
+
+  END;
   
+  RETURN 0;
+ 
+  END
+  GO
+  
+
+
 CREATE TRIGGER ThemBuoiHocBu ON  dbo.TietHoc
 FOR UPDATE
 AS
@@ -116,7 +136,7 @@ OPEN Trig;
 FETCH NEXT FROM Trig INTO @idTietHoc,@ngayHoc
 WHILE @@FETCH_STATUS = 0
 BEGIN
-IF( DATEADD(DAY,-7,@ngayHoc) = @ngayHocPre)
+IF( dbo.fHocBuDefault(@maLopHoc,@ngayHoc)=1 AND  DATEADD(DAY,-7,@ngayHoc) = @ngayHocPre)
 BEGIN	
 SET @ngayHocPre = (SELECT TOP 1 ngayHoc FROM dbo.TietHocBu WHERE idTietHoc =@idTietHoc)
 	UPDATE dbo.TietHocBu SET ngayHoc = DATEADD(DAY,-7,@ngayHoc) WHERE idTietHoc =@idTietHoc
@@ -132,7 +152,6 @@ FETCH NEXT FROM Trig INTO @idTietHoc,@ngayHoc
 		DEALLOCATE Trig;
         GO
  
-
 
   
   
